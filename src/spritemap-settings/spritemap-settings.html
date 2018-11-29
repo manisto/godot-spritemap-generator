@@ -1,0 +1,31 @@
+<table>
+    <tbody>
+        <tr>
+            <td>Spritemap:</td>
+            <td><input type="file" (change)="fileSelected($event);" accept="image/*" /></td>
+        </tr>
+        <tr>
+            <td>Tile size:</td>
+            <td><input type="number" (blur)="updatePreview();" [(ngModel)]="size" /></td>
+        </tr>
+        <tr>
+            <td>Tile margin:</td>
+            <td><input type="number" (blur)="updatePreview();" [(ngModel)]="margin" /></td>
+        </tr>
+        <tr>
+            <td>Preview:</td>
+            <td><canvas #preview
+                (click)="previewClicked($event);"></canvas></td>
+        </tr>
+        <ng-container *ngIf="selectedTile">
+            <tr>
+                <td>Name:</td>
+                <td><input type="text" [(ngModel)]="selectedTile.name" /></td>
+            </tr>
+            <tr>
+                <td>Collision:</td>
+                <td><input type="checkbox" [(ngModel)]="selectedTile.collision" /></td>
+            </tr>
+        </ng-container>
+    </tbody>
+</table>
