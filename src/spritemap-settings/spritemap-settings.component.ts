@@ -1,8 +1,8 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from "@angular/core";
 
 interface TileSettings {
-    name: string;
-    collision: boolean;
+    x: number,
+    y: number,
 }
 
 @Component({
@@ -20,7 +20,6 @@ export class SpritemapSettingsComponent implements AfterViewInit {
     private rows: number;
     private columns: number;
     private settings: TileSettings[];
-    private selectedTile: TileSettings;
 
     fileSelected($event: Event): void {
         let fileInput: HTMLInputElement = $event.target as HTMLInputElement;
@@ -44,11 +43,13 @@ export class SpritemapSettingsComponent implements AfterViewInit {
 
         this.settings = [];
 
-        for (let index = 0; index < this.rows * this.columns; index++) {
-            this.settings.push({
-                name: `Sprite${index + 1}`,
-                collision: false,
-            });
+        for (let row = 0; row < this.rows; row++) {
+            for (let column = 0; column < this.columns; column++) {
+                this.settings.push({
+                    x: column * 17,
+                    y: row * 17,
+                });
+            }
         }
 
         this.preview.width = this.spritemap.width * 2;
@@ -76,15 +77,6 @@ export class SpritemapSettingsComponent implements AfterViewInit {
                 this.context.strokeRect(x + .5, y + .5, this.size - 1, this.size - 1);
             }
         }
-    }
-
-    previewClicked($event: MouseEvent): void {
-        let x: number = $event.offsetX;
-        let y: number = $event.offsetY;
-        let row: number = Math.floor((y / 2) / (this.size + this.margin));
-        let column: number = Math.floor((x / 2) / (this.size + this.margin));
-        this.selectedTile = this.settings[(row * this.columns) + column];
-        console.log(this.settings[0]);
     }
 
     ngAfterViewInit(): void {

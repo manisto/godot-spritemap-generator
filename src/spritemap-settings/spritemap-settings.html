@@ -14,18 +14,38 @@
         </tr>
         <tr>
             <td>Preview:</td>
-            <td><canvas #preview
-                (click)="previewClicked($event);"></canvas></td>
+            <td><canvas #preview></canvas></td>
         </tr>
-        <ng-container *ngIf="selectedTile">
-            <tr>
-                <td>Name:</td>
-                <td><input type="text" [(ngModel)]="selectedTile.name" /></td>
-            </tr>
-            <tr>
-                <td>Collision:</td>
-                <td><input type="checkbox" [(ngModel)]="selectedTile.collision" /></td>
-            </tr>
-        </ng-container>
+        <pre>
+<ng-container *ngFor="let setting of settings; index as i">
+[sub_resource type="RectangleShape2D" id={{i + 1}}]
+
+custom_solver_bias = 0.0
+extents = Vector2( 8, 8 )
+</ng-container>
+[node name="Tileset" type="Node2D" index="0"]
+<ng-container *ngFor="let setting of settings; index as i">
+[node name="Sprite{{ i + 1 }}" type="Sprite" parent="." index="{{ i }}"]
+
+position = Vector2( {{ setting.x }}, {{ setting.y }} )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( {{ setting.x }}, {{ setting.y }}, 16, 16 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Sprite{{ i + 1 }}" index="0"]
+
+input_pickable = false
+collision_layer = 1
+collision_mask = 1
+constant_linear_velocity = Vector2( 0, 0 )
+constant_angular_velocity = 0.0
+friction = 1.0
+bounce = 0.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite{{ i + 1 }}/StaticBody2D" index="0"]
+
+shape = SubResource( {{ i + 1 }} )
+</ng-container>
+        </pre>
     </tbody>
 </table>
